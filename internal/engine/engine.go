@@ -1,21 +1,27 @@
 package engine
 
-import "time"
+import (
+	"relichunters/internal/gameapi"
+	"time"
+)
 
 // Engine holds the objects for running the game
 // This engine will use a push/pop to transition between scenes
 type Engine struct {
-	currentState  IGameState
-	stateStack    []IGameState
+	currentScene  gameapi.IGameScene
+	stateStack    []gameapi.IGameScene
 	running       bool
 	lastFrameTime time.Time
+	sceneManager  gameapi.ISceneManager
+	inputHandler  gameapi.IInputHandler
 }
 
-func NewEngine(initialState IGameState) *Engine {
+func NewEngine(sm gameapi.ISceneManager, inputHandler gameapi.IInputHandler) *Engine {
 	return &Engine{
-		currentState:  initialState,
 		running:       true,
 		lastFrameTime: time.Now(),
+		sceneManager:  sm,
+		inputHandler:  inputHandler,
 	}
 }
 
@@ -25,15 +31,22 @@ func (engine *Engine) Run() {
 		deltaTime := now.Sub(engine.lastFrameTime).Seconds()
 		engine.lastFrameTime = now
 
-		//do inputs or commands
+		//get current scene from scene manager
+		engine.currentScene = engine.sceneManager.CurrentScene()
 
-		//update current state
-		engine.currentState.Update(deltaTime)
+		//handle commands from inputHandler
+		cmds := engine.inputHandler.PollCommands(engine.currentScene)
+		for _, cmd := range cmds {
+			engine.currentScene.HandleInput(cmd)
+		}
 
-		//render current state
-		engine.currentState.Render(deltaTime)
+		//update current scene
+		engine.currentScene.Update(deltaTime)
 
-		//mimic 60fps for now
+		//render current scene
+		engine.currentScene.Render(deltaTime)
+
+		//mimic 60fps -- can do more to this later
 		time.Sleep(16 * time.Millisecond)
 	}
 }
