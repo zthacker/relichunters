@@ -15,7 +15,10 @@ func NewDefaultSceneManager(initialScene gameapi.IGameScene) *DefaultSceneManage
 		current: initialScene,
 	}
 
-	mgr.current.OnEnter()
+	if mgr.current != nil {
+		mgr.current.OnEnter()
+	}
+	
 	return mgr
 }
 

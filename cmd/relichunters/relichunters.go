@@ -22,18 +22,14 @@ func main() {
 	}
 	defer screen.Fini()
 
-	//input handler
+	//game setup
 	tcellInputHandler := inputhandlers.NewTCellInputHandler(screen)
 	tcellRenderer := renderer.NewTCellRenderer(screen)
+	sm := scenemanager.NewDefaultSceneManager(nil)
+	newGame := game.NewGame(tcellInputHandler, tcellRenderer, sm)
 
-	//create a new game
-	newGame := game.NewGame(tcellInputHandler, tcellRenderer)
-
-	//create initial scene for the engine
 	initialScene := newGame.CreateMenuScene()
-
-	//make the scene manager
-	sm := scenemanager.NewDefaultSceneManager(initialScene)
+	sm.SetScene(initialScene)
 
 	//create a new game engine
 	gameEngine := engine.NewEngine(sm)

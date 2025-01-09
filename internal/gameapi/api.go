@@ -21,6 +21,7 @@ type IGameApi interface {
 	GetData() *models.GameData
 	GetInputHandler() IInputHandler
 	GetRenderer() Renderer
+	GetSceneManager() ISceneManager
 	CreateMenuScene() IGameScene
 	CreateWorldScene() IGameScene
 	CreateBattleScene() IGameScene

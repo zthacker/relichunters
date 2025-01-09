@@ -6,4 +6,5 @@ type GameCharacter struct {
 	MaxHp    int
 	Speed    int
 	MaxSpeed int
+	X, Y     int
 }

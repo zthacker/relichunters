@@ -10,12 +10,13 @@ import (
 
 type Game struct {
 	//persistent data
-	data     *models.GameData
-	input    gameapi.IInputHandler
-	renderer gameapi.Renderer
+	data         *models.GameData
+	input        gameapi.IInputHandler
+	renderer     gameapi.Renderer
+	sceneManager gameapi.ISceneManager
 }
 
-func NewGame(ih gameapi.IInputHandler, renderer gameapi.Renderer) *Game {
+func NewGame(ih gameapi.IInputHandler, renderer gameapi.Renderer, sm gameapi.ISceneManager) *Game {
 	party := []*character.GameCharacter{&character.GameCharacter{
 		Name:     "MainCharacter",
 		Hp:       100,
@@ -23,7 +24,7 @@ func NewGame(ih gameapi.IInputHandler, renderer gameapi.Renderer) *Game {
 		Speed:    5,
 		MaxSpeed: 5,
 	}}
-	return &Game{data: &models.GameData{Player: &player.Player{Party: party}}, input: ih, renderer: renderer}
+	return &Game{data: &models.GameData{Player: &player.Player{Party: party}}, input: ih, renderer: renderer, sceneManager: sm}
 }
 
 func (g *Game) GetData() *models.GameData {
@@ -38,13 +39,16 @@ func (g *Game) GetRenderer() gameapi.Renderer {
 	return g.renderer
 }
 
+func (g *Game) GetSceneManager() gameapi.ISceneManager {
+	return g.sceneManager
+}
+
 func (g *Game) CreateMenuScene() gameapi.IGameScene {
 	return scenes.NewMenuScene(g)
 }
 
 func (g *Game) CreateWorldScene() gameapi.IGameScene {
-	//TODO implement me
-	panic("implement me")
+	return scenes.NewWorldScene(g)
 }
 
 func (g *Game) CreateBattleScene() gameapi.IGameScene {
@@ -53,6 +57,5 @@ func (g *Game) CreateBattleScene() gameapi.IGameScene {
 }
 
 func (g *Game) CreateCutScene() gameapi.IGameScene {
-	//TODO implement me
-	panic("implement me")
+	return scenes.NewCutScene(g)
 }
