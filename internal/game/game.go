@@ -10,11 +10,12 @@ import (
 
 type Game struct {
 	//persistent data
-	data  *models.GameData
-	input gameapi.IInputHandler
+	data     *models.GameData
+	input    gameapi.IInputHandler
+	renderer gameapi.Renderer
 }
 
-func NewGame() *Game {
+func NewGame(ih gameapi.IInputHandler, renderer gameapi.Renderer) *Game {
 	party := []*character.GameCharacter{&character.GameCharacter{
 		Name:     "MainCharacter",
 		Hp:       100,
@@ -22,11 +23,19 @@ func NewGame() *Game {
 		Speed:    5,
 		MaxSpeed: 5,
 	}}
-	return &Game{data: &models.GameData{Player: &player.Player{Party: party}}}
+	return &Game{data: &models.GameData{Player: &player.Player{Party: party}}, input: ih, renderer: renderer}
 }
 
 func (g *Game) GetData() *models.GameData {
 	return g.data
+}
+
+func (g *Game) GetInputHandler() gameapi.IInputHandler {
+	return g.input
+}
+
+func (g *Game) GetRenderer() gameapi.Renderer {
+	return g.renderer
 }
 
 func (g *Game) CreateMenuScene() gameapi.IGameScene {

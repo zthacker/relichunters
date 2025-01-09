@@ -12,13 +12,15 @@ type ISceneManager interface {
 type IGameScene interface {
 	Update(delta float64)
 	Render(delta float64)
-	HandleInput(cmd GameCommand)
+	HandleInput()
 	OnEnter()
 	OnExit()
 }
 
 type IGameApi interface {
 	GetData() *models.GameData
+	GetInputHandler() IInputHandler
+	GetRenderer() Renderer
 	CreateMenuScene() IGameScene
 	CreateWorldScene() IGameScene
 	CreateBattleScene() IGameScene
@@ -26,9 +28,22 @@ type IGameApi interface {
 }
 
 type IInputHandler interface {
-	PollCommands(currentScene IGameScene) []GameCommand
+	PollCommands() []GameCommand
 }
 
-type GameCommand interface {
-	Execute()
+// Renderer will have a TODO to implement other methods as the game grows
+type Renderer interface {
+	Init() error
+	Clear() error
+	DrawText(x, y int, text string) error
+	DrawTextStyled(x, y int, text string, style *models.Style) error
+	DrawBox(x, y, w, h int, style *models.Style) error
+	DrawLine(x1, y1, x2, y2 int, style *models.Style) error
+	DrawSprites() error
+	DrawImage(img string, x, y int) error
+	GetSize() (int, int)
+	Present() error
+	Stop() error
 }
+
+type GameCommand interface{}

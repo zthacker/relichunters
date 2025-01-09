@@ -13,15 +13,13 @@ type Engine struct {
 	running       bool
 	lastFrameTime time.Time
 	sceneManager  gameapi.ISceneManager
-	inputHandler  gameapi.IInputHandler
 }
 
-func NewEngine(sm gameapi.ISceneManager, inputHandler gameapi.IInputHandler) *Engine {
+func NewEngine(sm gameapi.ISceneManager) *Engine {
 	return &Engine{
 		running:       true,
 		lastFrameTime: time.Now(),
 		sceneManager:  sm,
-		inputHandler:  inputHandler,
 	}
 }
 
@@ -34,11 +32,8 @@ func (engine *Engine) Run() {
 		//get current scene from scene manager
 		engine.currentScene = engine.sceneManager.CurrentScene()
 
-		//handle commands from inputHandler
-		cmds := engine.inputHandler.PollCommands(engine.currentScene)
-		for _, cmd := range cmds {
-			engine.currentScene.HandleInput(cmd)
-		}
+		//check input handler
+		engine.currentScene.HandleInput()
 
 		//update current scene
 		engine.currentScene.Update(deltaTime)
