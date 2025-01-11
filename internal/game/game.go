@@ -29,6 +29,7 @@ func (g *Game) InitGame() {
 	if err := g.SetScene(models.SceneKeyMainMenu); err != nil {
 		g.log.Fatalln(err)
 	}
+	g.data = &models.GameData{}
 	g.log.Println(fmt.Sprintf("Current scene: %v", g.currentScene))
 }
 
@@ -100,6 +101,8 @@ func (g *Game) CreateSceneFromDef(def *models.SceneDefinition) (gameapi.IGameSce
 		return scenes.NewMenuScene(g, def, g.log), nil
 	case models.SceneTypeCutScene:
 		return scenes.NewCutScene(g, def, g.log), nil
+	case models.SceneTypeWorld:
+		return scenes.NewWorldScene(g, def, g.log), nil
 	default:
 		sDef := &models.SceneDefinition{Menu: models.MenuOptions{
 			MenuTitle:   "Unknown Scene Def Type",

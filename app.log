@@ -1,15 +1,19 @@
-INFO: 2025/01/10 16:25:39 relichunters.go:28: screen setup
-INFO: 2025/01/10 16:25:39 relichunters.go:46: game setup
-INFO: 2025/01/10 16:25:39 relichunters.go:50: new game call
-INFO: 2025/01/10 16:25:39 relichunters.go:52: init call
-INFO: 2025/01/10 16:25:39 game.go:28: Initializing game
-INFO: 2025/01/10 16:25:39 game.go:36: Creating scene: MAIN:MENU
-INFO: 2025/01/10 16:25:39 game.go:90: Creating scene from def: &{MAIN:MENU MENU Default Load Screen false {Main Menu [{NEWGAME:CUT_SCENE New Game} {LOAD:MENU Load Game} {SAVE:MENU Save Game} {QUIT:MENU Quit Game}]}  [] []}
-INFO: 2025/01/10 16:25:39 menuscene.go:98: Entering MenuScene
-INFO: 2025/01/10 16:25:39 menuscene.go:101: MenuScene: &{game:0xc0000800c0 sDefs:0xc00002c640 log:0xc00001c630 input:0xc0000224e0 renderer:0xc0000224f0 cursorIndex:0}
-INFO: 2025/01/10 16:25:39 game.go:32: Current scene: &{0xc0000800c0 0xc00002c640 0xc00001c630 0xc0000224e0 0xc0000224f0 0}
-INFO: 2025/01/10 16:25:39 relichunters.go:56: new engine call
-INFO: 2025/01/10 16:25:39 relichunters.go:60: engine run call
-INFO: 2025/01/10 16:25:41 game.go:36: Creating scene: NEWGAME:CUT_SCENE
-INFO: 2025/01/10 16:25:41 game.go:90: Creating scene from def: &{NEWGAME:CUT_SCENE CUT_SCENE New Game Cut Scene in Progress... false { []}  [] []}
-INFO: 2025/01/10 16:25:41 cutscene.go:46: Entered CutScene: New Game Cut Scene in Progress...
+INFO: 2025/01/10 17:27:05 relichunters.go:28: screen setup
+INFO: 2025/01/10 17:27:05 relichunters.go:46: game setup
+INFO: 2025/01/10 17:27:05 relichunters.go:50: new game call
+INFO: 2025/01/10 17:27:05 relichunters.go:52: init call
+INFO: 2025/01/10 17:27:05 game.go:28: Initializing game
+INFO: 2025/01/10 17:27:05 game.go:37: Creating scene: MAIN:MENU
+INFO: 2025/01/10 17:27:05 game.go:91: Creating scene from def: &{MAIN:MENU MENU Default Load Screen false {Main Menu [{NEWGAME:CUT_SCENE New Game} {LOAD:MENU Load Game} {SAVE:MENU Save Game} {QUIT:MENU Quit Game}]}  [] []}
+INFO: 2025/01/10 17:27:05 menuscene.go:98: Entering MenuScene
+INFO: 2025/01/10 17:27:05 menuscene.go:101: MenuScene: &{game:0xc00009e0c0 sDefs:0xc0000a0b40 log:0xc00001cba0 input:0xc000022530 renderer:0xc000022540 cursorIndex:0}
+INFO: 2025/01/10 17:27:05 game.go:33: Current scene: &{0xc00009e0c0 0xc0000a0b40 0xc00001cba0 0xc000022530 0xc000022540 0}
+INFO: 2025/01/10 17:27:05 relichunters.go:56: new engine call
+INFO: 2025/01/10 17:27:05 relichunters.go:60: engine run call
+INFO: 2025/01/10 17:27:07 game.go:37: Creating scene: NEWGAME:CUT_SCENE
+INFO: 2025/01/10 17:27:07 game.go:91: Creating scene from def: &{NEWGAME:CUT_SCENE CUT_SCENE New Game Cut Scene in Progress... false { []}  [] []}
+INFO: 2025/01/10 17:27:07 cutscene.go:47: Entered CutScene: New Game Cut Scene in Progress...
+INFO: 2025/01/10 17:27:07 cutscene.go:54: CutScene: &{game:0xc00009e0c0 sDefs:0xc0000a0a00 log:0xc00001cba0 input:<nil> renderer:0xc000022540 timer:2}
+INFO: 2025/01/10 17:27:09 game.go:37: Creating scene: NEW_GAME:WORLD
+INFO: 2025/01/10 17:27:09 game.go:91: Creating scene from def: &{NEW_GAME:WORLD WORLD New Game World Scene false {Main Menu [{NEWGAME:CUT_SCENE New Game} {LOAD:MENU Load Game} {SAVE:MENU Save Game} {QUIT:MENU Quit Game}]}  [] []}
+INFO: 2025/01/10 17:27:09 worldscene.go:42: Entering into WorldScene: New Game World Scene

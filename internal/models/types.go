@@ -5,7 +5,7 @@ type SceneType string
 
 const (
 	SceneTypeMenu      SceneType = "MENU"
-	SceneTypeOverworld SceneType = "OVERWORLD"
+	SceneTypeWorld     SceneType = "WORLD"
 	SceneTypeBattle    SceneType = "BATTLE"
 	SceneTypeInventory SceneType = "INVENTORY"
 	SceneTypeCutScene  SceneType = "CUT_SCENE"

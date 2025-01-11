@@ -1,4 +1,4 @@
-package loadscreens
+package scenes
 
 import (
 	"fmt"
