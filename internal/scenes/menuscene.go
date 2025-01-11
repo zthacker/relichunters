@@ -33,7 +33,7 @@ func (m *MenuScene) Render(delta float64) {
 	screenW, screenH := m.renderer.GetSize()
 
 	menuWidth := 20
-	menuHeight := len(m.sDefs.Menu.MenuOptions) + 2
+	menuHeight := len(m.sDefs.Menu.Options) + 2
 
 	startX := (screenW - menuWidth) / 2
 	startY := (screenH - menuHeight) / 2
@@ -52,7 +52,7 @@ func (m *MenuScene) Render(delta float64) {
 	}
 	m.renderer.DrawBox(startX, startY, menuWidth, menuHeight, boxStyle)
 
-	for i, option := range m.sDefs.Menu.MenuOptions {
+	for i, option := range m.sDefs.Menu.Options {
 		lineX := startX + 2
 		lineY := startY + 1 + i
 
@@ -74,19 +74,19 @@ func (m *MenuScene) HandleInput() {
 		case commands.MoveCommand:
 			if c.Dy > 0 {
 				m.cursorIndex++
-				if m.cursorIndex >= len(m.sDefs.Menu.MenuOptions) {
+				if m.cursorIndex >= len(m.sDefs.Menu.Options) {
 					m.cursorIndex = 0
 				}
 			}
 			if c.Dy < 0 {
 				m.cursorIndex--
 				if m.cursorIndex < 0 {
-					m.cursorIndex = len(m.sDefs.Menu.MenuOptions) - 1
+					m.cursorIndex = len(m.sDefs.Menu.Options) - 1
 				}
 			}
 		case commands.SelectCommand:
-			opt := m.sDefs.Menu.MenuOptions[m.cursorIndex]
-			if err := m.game.SetScene(opt.Key); err != nil {
+			opt := m.sDefs.Menu.Options[m.cursorIndex]
+			if err := m.game.SetScene(opt.SceneKey); err != nil {
 				m.log.Fatalln(err)
 			}
 		}

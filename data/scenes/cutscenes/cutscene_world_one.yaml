@@ -1,0 +1,4 @@
+key: "NEWGAME:CUT_SCENE"
+type: "CUT_SCENE"
+next_scene: "NEW_GAME:WORLD"
+description: "New Game Cut Scene in Progress..."

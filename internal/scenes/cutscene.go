@@ -27,8 +27,7 @@ func (n *CutScene) Update(delta float64) {
 		n.timer -= delta
 	}
 	if n.timer < 0 {
-		//TODO for cutscenes, we can have this in the SceneDefinition on where to go to next
-		n.game.SetScene(models.SceneKeyNewGameWorld)
+		n.game.SetScene(n.sDefs.NextScene)
 	}
 }
 

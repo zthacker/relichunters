@@ -26,14 +26,15 @@ func NewGame(sr *sceneregistry.SceneRegistry, ih gameapi.IInputHandler, renderer
 
 func (g *Game) InitGame() {
 	g.log.Println("Initializing game")
-	if err := g.SetScene(models.SceneKeyMainMenu); err != nil {
+	//TODO Un-hard-code later
+	if err := g.SetScene("MAIN:MENU"); err != nil {
 		g.log.Fatalln(err)
 	}
 	g.data = &models.GameData{}
 	g.log.Println(fmt.Sprintf("Current scene: %v", g.currentScene))
 }
 
-func (g *Game) CreateScene(key models.SceneKey) (gameapi.IGameScene, error) {
+func (g *Game) CreateScene(key string) (gameapi.IGameScene, error) {
 	g.log.Println(fmt.Sprintf("Creating scene: %v", key))
 	def, err := g.registry.GetDefinition(key)
 	if err != nil {
@@ -42,7 +43,7 @@ func (g *Game) CreateScene(key models.SceneKey) (gameapi.IGameScene, error) {
 	return g.CreateSceneFromDef(def)
 }
 
-func (g *Game) SetScene(key models.SceneKey) error {
+func (g *Game) SetScene(key string) error {
 	newScene, err := g.CreateScene(key)
 	if err != nil {
 		return err
@@ -55,7 +56,7 @@ func (g *Game) SetScene(key models.SceneKey) error {
 	return nil
 }
 
-func (g *Game) PushScene(key models.SceneKey) error {
+func (g *Game) PushScene(key string) error {
 	newScene, err := g.CreateScene(key)
 	if err != nil {
 		return err
@@ -91,8 +92,8 @@ func (g *Game) CreateSceneFromDef(def *models.SceneDefinition) (gameapi.IGameSce
 	g.log.Println(fmt.Sprintf("Creating scene from def: %v", def))
 	if def == nil {
 		sDef := &models.SceneDefinition{Menu: models.MenuOptions{
-			MenuTitle:   "Scene Definition was nil",
-			MenuOptions: nil,
+			MenuTitle: "Scene Definition was nil",
+			Options:   nil,
 		}}
 		return scenes.NewMenuScene(g, sDef, g.log), nil
 	}
@@ -105,8 +106,8 @@ func (g *Game) CreateSceneFromDef(def *models.SceneDefinition) (gameapi.IGameSce
 		return scenes.NewWorldScene(g, def, g.log), nil
 	default:
 		sDef := &models.SceneDefinition{Menu: models.MenuOptions{
-			MenuTitle:   "Unknown Scene Def Type",
-			MenuOptions: nil,
+			MenuTitle: "Unknown Scene Def Type",
+			Options:   nil,
 		}}
 		return scenes.NewMenuScene(g, sDef, g.log), nil
 	}

@@ -1,0 +1,14 @@
+key: "MAIN:MENU"
+type: "MENU"
+description: "Main Manu Scene"
+menu:
+  menu_title: "Main Menu"
+  options:
+    - scene_key: "NEWGAME:CUT_SCENE"
+      display: "New Game"
+    - scene_key: "LOAD:MENU"
+      display: "Load Game"
+    - scene_key: "SAVE:MENU"
+      display: "Save Game"
+    - scene_key: "QUIT:MENU"
+      display: "Quit Game"

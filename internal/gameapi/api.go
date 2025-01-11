@@ -5,9 +5,9 @@ import (
 )
 
 type ISceneManager interface {
-	CreateScene(key models.SceneKey) (IGameScene, error)
-	SetScene(key models.SceneKey) error
-	PushScene(key models.SceneKey) error
+	CreateScene(key string) (IGameScene, error)
+	SetScene(key string) error
+	PushScene(key string) error
 	PopScene()
 	CurrentScene() IGameScene
 }

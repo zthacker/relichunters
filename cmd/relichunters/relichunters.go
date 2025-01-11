@@ -1,8 +1,9 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"github.com/gdamore/tcell/v2"
+	"gopkg.in/yaml.v2"
 	"log"
 	"os"
 	"path/filepath"
@@ -15,7 +16,6 @@ import (
 )
 
 func main() {
-
 	file, err := os.OpenFile("app.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatal(err)
@@ -40,7 +40,7 @@ func main() {
 
 	//scene registry from JSON file
 	sr := sceneregistry.NewSceneRegistry()
-	registerScenesFromJSON(sr, logger)
+	registerScenes(sr, logger)
 
 	//game setup
 	logger.Println("game setup")
@@ -61,28 +61,48 @@ func main() {
 	gameEngine.Run()
 }
 
-func registerScenesFromJSON(sr *sceneregistry.SceneRegistry, logger *log.Logger) {
-	var allSceneDefs []models.SceneDefinition
-	var sDefs []models.SceneDefinition
+func registerScenes(sr *sceneregistry.SceneRegistry, logger *log.Logger) {
+	logger.Println("Initializing Scene Registry")
+	var sceneDefs []models.SceneDefinition
+	var sDef models.SceneDefinition
 
-	registryData, err := os.ReadDir("sceneregistrydata")
+	root := "./data"
+
+	err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		logger.Println(d.Name())
+		if !d.IsDir() {
+			logger.Println(path)
+			content, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+
+			err = yaml.Unmarshal(content, &sDef)
+			if err != nil {
+				return err
+			}
+			logger.Println(fmt.Sprintf("%+v", sDef))
+			sceneDefs = append(sceneDefs, sDef)
+		}
+
+		return nil
+	})
+
 	if err != nil {
 		logger.Fatalln(err)
 	}
 
-	for _, file := range registryData {
-		fBytes, err := os.ReadFile(filepath.Join("sceneregistrydata", file.Name()))
+	logger.Println("Looping through All Scenes: %+v", sceneDefs)
+	for _, def := range sceneDefs {
+		logger.Println(fmt.Printf("%+v", def))
+		sr.SetSceneDef(&def)
+		scene, err := sr.GetDefinition(def.Key)
 		if err != nil {
 			logger.Fatalln(err)
 		}
-		err = json.Unmarshal(fBytes, &sDefs)
-		if err != nil {
-			logger.Fatalln(err)
-		}
-		allSceneDefs = append(allSceneDefs, sDefs...)
-	}
-
-	for _, def := range allSceneDefs {
-		sr.LoadSceneDef(def)
+		fmt.Println(fmt.Sprintf("GET: %+v", scene))
 	}
 }

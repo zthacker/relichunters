@@ -1,6 +1,5 @@
 package models
 
-type SceneKey string // definitions in according files
 type SceneType string
 
 const (
