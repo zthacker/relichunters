@@ -1,45 +1,45 @@
-package scenes
+package worlds
 
 import (
 	"relichunters/internal/gameapi"
 	"relichunters/internal/models"
 )
 
-type WorldScene struct {
+type WorldOneScene struct {
 	game         gameapi.IGameApi
 	gameData     *models.GameData
 	renderer     gameapi.Renderer
 	inputHandler gameapi.IInputHandler
 }
 
-func NewWorldScene(g gameapi.IGameApi) *WorldScene {
-	return &WorldScene{game: g}
+func NewWorldOneScene(g gameapi.IGameApi) *WorldOneScene {
+	return &WorldOneScene{game: g}
 }
 
-func (w *WorldScene) Update(delta float64) {
+func (w *WorldOneScene) Update(delta float64) {
 	//check for random battle here
 	//do AIStrategies -- patrol, etc
 	//
 }
 
-func (w *WorldScene) Render(delta float64) {
+func (w *WorldOneScene) Render(delta float64) {
 	w.renderer.Clear()
 	w.renderer.DrawText(w.gameData.Player.Party[0].X, w.gameData.Player.Party[0].Y, "@")
 
 	w.renderer.Present()
 }
 
-func (w *WorldScene) HandleInput() {
+func (w *WorldOneScene) HandleInput() {
 	//handle inputs
 }
 
-func (w *WorldScene) OnEnter() {
-	w.gameData = w.game.GetData()
+func (w *WorldOneScene) OnEnter() {
+	w.gameData = w.game.GetGameData()
 	w.renderer = w.game.GetRenderer()
 	w.inputHandler = w.game.GetInputHandler()
 }
 
-func (w *WorldScene) OnExit() {
+func (w *WorldOneScene) OnExit() {
 	//TODO implement me
 	panic("implement me")
 }

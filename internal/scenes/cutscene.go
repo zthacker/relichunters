@@ -2,49 +2,57 @@ package scenes
 
 import (
 	"fmt"
+	"log"
 	"relichunters/internal/gameapi"
+	"relichunters/internal/models"
+	"relichunters/internal/player"
 )
 
 type CutScene struct {
 	game     gameapi.IGameApi
+	sDefs    *models.SceneDefinition
+	log      *log.Logger
+	input    gameapi.IInputHandler
 	renderer gameapi.Renderer
-	//later on load in things like images, videos, etc
-	//for now we'll just set a timer on a cutscene and when it's done we'll transition
-	timer float64
+	timer    float64
 }
 
-func NewCutScene(g gameapi.IGameApi) *CutScene {
-	return &CutScene{game: g}
+func NewCutScene(g gameapi.IGameApi, sceneDefs *models.SceneDefinition, logger *log.Logger) *CutScene {
+	return &CutScene{game: g, sDefs: sceneDefs, log: logger}
 }
 
-func (c *CutScene) Update(delta float64) {
+func (n *CutScene) Update(delta float64) {
 	//for  now just ticket down the timer
-	if c.timer > 0 {
-		c.timer -= delta
+	if n.timer > 0 {
+		n.timer -= delta
 	}
-	if c.timer < 0 {
-		sm := c.game.GetSceneManager()
-		world := c.game.CreateWorldScene()
-		sm.SetScene(world)
+	if n.timer < 0 {
+
 	}
 }
 
-func (c *CutScene) Render(delta float64) {
-	c.renderer.Clear()
-	txt := fmt.Sprintf("Cutscene Length: %f ", c.timer)
-	c.renderer.DrawText(0, 0, txt)
-	c.renderer.Present()
+func (n *CutScene) Render(delta float64) {
+	n.renderer.Clear()
+	txt := fmt.Sprintf("Cutscene Length: %f ", n.timer)
+	n.renderer.DrawText(0, 0, txt)
+	n.renderer.Present()
 }
 
-func (c *CutScene) HandleInput() {
-	//nothing to handle
+func (n *CutScene) HandleInput() {
+	//nothing to do here
 }
 
-func (c *CutScene) OnEnter() {
-	c.timer = 2.0
-	c.renderer = c.game.GetRenderer()
+func (n *CutScene) OnEnter() {
+	n.log.Println(fmt.Sprintf("Entered CutScene: %s", n.sDefs.Description))
+	n.timer = 2.0
+	n.renderer = n.game.GetRenderer()
+
+	//NewGame setup
+	newGameData := n.game.GetGameData()
+	newGameData.Player = player.NewPlayer()
+	n.log.Println(fmt.Sprintf("CutScene: %+v", n))
 }
 
-func (c *CutScene) OnExit() {
-
+func (n *CutScene) OnExit() {
+	//nothing here
 }

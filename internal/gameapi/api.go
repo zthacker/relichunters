@@ -1,12 +1,15 @@
 package gameapi
 
-import "relichunters/internal/models"
+import (
+	"relichunters/internal/models"
+)
 
 type ISceneManager interface {
-	CurrentScene() IGameScene
-	SetScene(newState IGameScene)
-	PushScene(newState IGameScene)
+	CreateScene(key models.SceneKey) (IGameScene, error)
+	SetScene(key models.SceneKey) error
+	PushScene(key models.SceneKey) error
 	PopScene()
+	CurrentScene() IGameScene
 }
 
 type IGameScene interface {
@@ -18,21 +21,17 @@ type IGameScene interface {
 }
 
 type IGameApi interface {
-	GetData() *models.GameData
+	ISceneManager
+	GetGameData() *models.GameData
+	SetGameData(data *models.GameData)
 	GetInputHandler() IInputHandler
 	GetRenderer() Renderer
-	GetSceneManager() ISceneManager
-	CreateMenuScene() IGameScene
-	CreateWorldScene() IGameScene
-	CreateBattleScene() IGameScene
-	CreateCutScene() IGameScene
 }
 
 type IInputHandler interface {
 	PollCommands() []GameCommand
 }
 
-// Renderer will have a TODO to implement other methods as the game grows
 type Renderer interface {
 	Init() error
 	Clear() error

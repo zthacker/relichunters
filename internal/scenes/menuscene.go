@@ -3,30 +3,23 @@ package scenes
 import (
 	"fmt"
 	"github.com/gdamore/tcell/v2"
+	"log"
 	"relichunters/internal/commands"
 	"relichunters/internal/gameapi"
 	"relichunters/internal/models"
 )
 
-type MenuSelection string
-
-const (
-	NewGame  MenuSelection = "New Game"
-	LoadGame MenuSelection = "Load Game"
-	SaveGame MenuSelection = "Save Game"
-	QuitGame MenuSelection = "Quit"
-)
-
 type MenuScene struct {
 	game        gameapi.IGameApi
+	sDefs       *models.SceneDefinition
+	log         *log.Logger
 	input       gameapi.IInputHandler
 	renderer    gameapi.Renderer
-	options     []MenuSelection
 	cursorIndex int
 }
 
-func NewMenuScene(g gameapi.IGameApi) *MenuScene {
-	return &MenuScene{game: g, cursorIndex: 0}
+func NewMenuScene(g gameapi.IGameApi, sceneDefs *models.SceneDefinition, logger *log.Logger) *MenuScene {
+	return &MenuScene{game: g, sDefs: sceneDefs, log: logger, cursorIndex: 0}
 }
 
 func (m *MenuScene) Update(delta float64) {
@@ -40,10 +33,12 @@ func (m *MenuScene) Render(delta float64) {
 	screenW, screenH := m.renderer.GetSize()
 
 	menuWidth := 20
-	menuHeight := len(m.options) + 2
+	menuHeight := len(m.sDefs.Menu.MenuOptions) + 2
 
 	startX := (screenW - menuWidth) / 2
 	startY := (screenH - menuHeight) / 2
+
+	m.renderer.DrawText(1, 1, m.sDefs.Menu.MenuTitle)
 
 	boxStyle := &models.Style{
 		ForegroundColor: uint64(tcell.ColorYellow),
@@ -57,16 +52,16 @@ func (m *MenuScene) Render(delta float64) {
 	}
 	m.renderer.DrawBox(startX, startY, menuWidth, menuHeight, boxStyle)
 
-	for i, option := range m.options {
+	for i, option := range m.sDefs.Menu.MenuOptions {
 		lineX := startX + 2
 		lineY := startY + 1 + i
 
 		if m.cursorIndex == i {
-			txt := fmt.Sprintf("-> %s", string(option))
+			txt := fmt.Sprintf("-> %s", option.Display)
 			m.renderer.DrawTextStyled(lineX, lineY, txt, textStyle)
 			continue
 		}
-		m.renderer.DrawTextStyled(lineX, lineY, string(option), textStyle)
+		m.renderer.DrawTextStyled(lineX, lineY, option.Display, textStyle)
 	}
 
 	m.renderer.Present()
@@ -79,28 +74,20 @@ func (m *MenuScene) HandleInput() {
 		case commands.MoveCommand:
 			if c.Dy > 0 {
 				m.cursorIndex++
-				if m.cursorIndex >= len(m.options) {
+				if m.cursorIndex >= len(m.sDefs.Menu.MenuOptions) {
 					m.cursorIndex = 0
 				}
 			}
 			if c.Dy < 0 {
 				m.cursorIndex--
 				if m.cursorIndex < 0 {
-					m.cursorIndex = len(m.options) - 1
+					m.cursorIndex = len(m.sDefs.Menu.MenuOptions) - 1
 				}
 			}
 		case commands.SelectCommand:
-			opt := m.options[m.cursorIndex]
-			switch opt {
-			case NewGame:
-				introCutScene := m.game.CreateCutScene()
-				sm := m.game.GetSceneManager()
-				sm.SetScene(introCutScene)
-			case LoadGame:
-				//goes to a load game scene to load data
-			case SaveGame:
-				//saves game data
-			case QuitGame:
+			opt := m.sDefs.Menu.MenuOptions[m.cursorIndex]
+			if err := m.game.SetScene(opt.Key); err != nil {
+				m.log.Fatalln(err)
 			}
 		}
 	}
@@ -108,9 +95,10 @@ func (m *MenuScene) HandleInput() {
 }
 
 func (m *MenuScene) OnEnter() {
-	m.options = append(m.options, NewGame, LoadGame, SaveGame, QuitGame)
+	m.log.Println("Entering MenuScene")
 	m.input = m.game.GetInputHandler()
 	m.renderer = m.game.GetRenderer()
+	m.log.Println(fmt.Sprintf("MenuScene: %+v", m))
 }
 
 func (m *MenuScene) OnExit() {

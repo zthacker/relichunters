@@ -1,6 +1,6 @@
 Tomorrow:
-    Transition from Menu to New Game to Battle Scenes.
-    Implement a Battle System and go back to previous scene with character updates
+    GameScenes are getting grabbed based on state that is in game data
+    that's a map look up now instead of looking it up in a slice
 
 Stop once all current scenes are implemented and look at refactors or designs
     aka: the prototype is done and it's time to see what we want to change
